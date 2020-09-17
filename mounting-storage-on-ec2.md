@@ -25,13 +25,13 @@ and add the line:
 
 ## Resizing attached storage
 
-I had to resize the EBS volume. I'm grateful to Ryan D. Smith for making the process clear
-for me. The basic steps are:
+I had to resize the EBS volume. I'm grateful to Ryan D. Smith for making the
+process clear for me. The basic steps are:
 
-1. On the host, unmount the volume.
-1. From the AWS Console, expand the volume.
-1. On the host, expand the filesystem.
-1. Remount the volume.
+1.  On the host, unmount the volume.
+2.  From the AWS Console, expand the volume.
+3.  On the host, expand the filesystem.
+4.  Remount the volume.
 
 ### Unmount the volume
 
@@ -54,19 +54,20 @@ Use lsblk to see what we're dealing with:
 
 ### Expand the volume
 
-Go to the AWS console's EC2 dashboard. In the navigation menu (left side of the page) 
-select Elastic Block Store >> Volumes. Then:
+Go to the AWS console's EC2 dashboard. In the navigation menu (left side of the
+page) select Elastic Block Store >> Volumes. Then:
 
-* Click on the target volume.
-* Under the Actions menu, select Modify Volume.
-* Modify the volume.
+*   Click on the target volume.
+*   Under the Actions menu, select Modify Volume.
+*   Modify the volume.
 
-The update can take a while to complete. Its status will be marked as
-"in-use - optimizing."
+The update can take a while to complete. Its status will be marked as "in-use -
+optimizing."
 
-Guidance from AWS at https://docs.aws.amazon.com/cli/latest/reference/ec2/modify-volume.html.
+Guidance from AWS at
+https://docs.aws.amazon.com/cli/latest/reference/ec2/modify-volume.html.
 
 ### Expand the filesystem
 
-Once the volume is expanded, the associated Linux filesystem needs to be expanded too.
-On the host ***TBD***.
+Once the volume is expanded, the associated Linux filesystem needs to be
+expanded too. On the host ***TBD***.
