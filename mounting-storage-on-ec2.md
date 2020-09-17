@@ -5,19 +5,19 @@
 An Ubuntu 18.04 server has been set up with 10 TB additional EBS storage. First
 make it available as /opt.
 
-     ubuntu@ip-10-43-18-223:~$ lsblk                           # output shows extra 10 TB storage is at nvme0n1
-     ubuntu@ip-10-43-18-223:~$ sudo mkfs -t xfs /dev/nvme0n1   # prep as xfs
-     ubuntu@ip-10-43-18-223:~$ sudo mkdir /opt                 # if needed
-     ubuntu@ip-10-43-18-223:~$ sudo mount /dev/nvme0n1 /opt    # mount as /opt
+     ubuntu@ip-10-20-30-400:~$ lsblk                           # output shows extra 10 TB storage is at nvme0n1
+     ubuntu@ip-10-20-30-400:~$ sudo mkfs -t xfs /dev/nvme0n1   # prep as xfs
+     ubuntu@ip-10-20-30-400:~$ sudo mkdir /opt                 # if needed
+     ubuntu@ip-10-20-30-400:~$ sudo mount /dev/nvme0n1 /opt    # mount as /opt
 
 Now ensure the mount is preserved on reboot. Run lsblk:
 
-     ubuntu@ip-10-43-18-223:~$ sudo lsblk -o +UUID
+     ubuntu@ip-10-20-30-400:~$ sudo lsblk -o +UUID
 
 Harvest the UUID, for example xxxx131c-1234-451e-8d34-ec98989891ae, and update
 /etc/fstab as follows:
 
-     ubuntu@ip-10-43-18-223:~$ sudo vi /etc/fstab
+     ubuntu@ip-10-20-30-400:~$ sudo vi /etc/fstab
 
 and add the line:
 
@@ -37,7 +37,7 @@ process clear for me. The basic steps are:
 
 Use lsblk to see what we're dealing with:
 
-     ubuntu@ip-10-43-18-223:~$ lsblk
+     ubuntu@ip-10-20-30-400:~$ lsblk
      NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
      loop0         7:0    0   18M  1 loop /snap/amazon-ssm-agent/1566
      loop1         7:1    0 96.6M  1 loop /snap/core/9804
@@ -49,7 +49,7 @@ Use lsblk to see what we're dealing with:
 
 /dev/nvme0n1 has the mount point /opt. Unmount the volume:
 
-     ubuntu@ip-10-43-18-223:~$ sudo umount --verbose /opt
+     ubuntu@ip-10-20-30-400:~$ sudo umount --verbose /opt
      umount: /opt unmounted
 
 ### Expand the volume
