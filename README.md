@@ -1,2 +1,2 @@
 # aws-examples
-Snippets for working with AWS
+Notes and snippets for working with AWS.
