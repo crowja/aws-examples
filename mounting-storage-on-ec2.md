@@ -21,9 +21,13 @@ abcd131c-1234-451e-8d34-ec98989891ae, and update /etc/fstab as follows:
 
      ubuntu@ip-10-20-30-400:~$ sudo vi /etc/fstab
 
-Add the line:
+Add the line
 
      UUID=abcd131c-1234-451e-8d34-ec98989891ae /opt xfs defaults,nofail 0 2
+
+and reboot:
+
+     ubuntu@ip-10-20-30-400:~$ sudo reboot
 
 ## Resizing attached storage
 
