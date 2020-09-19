@@ -12,11 +12,11 @@ First make the storage available as /opt:
      ubuntu@ip-10-20-30-400:~$ sudo mkdir /opt                 # if needed
      ubuntu@ip-10-20-30-400:~$ sudo mount /dev/nvme0n1 /opt    # mount as /opt
 
-Ensure the mount is preserved on reboot. Running lsblk again:
+Ensure the mount is preserved on reboot. Running lsblk again,
 
      ubuntu@ip-10-20-30-400:~$ sudo lsblk -o +UUID
 
-From the output harvest the UUID, in this case
+harvest the UUID from the output, in this case
 abcd131c-1234-451e-8d34-ec98989891ae, and update /etc/fstab as follows:
 
      ubuntu@ip-10-20-30-400:~$ sudo vi /etc/fstab
