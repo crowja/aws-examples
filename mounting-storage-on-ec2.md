@@ -2,31 +2,33 @@
 
 ## On the instance, set up storage added when configuring the instance
 
-An Ubuntu 18.04 server has been set up with 9 TB additional EBS storage. First
-make it available as /opt.
+I set up an Ubuntu 18.04 server with 9 TB additional EBS volume, which is what
+we'll use in this example.
 
-     ubuntu@ip-10-20-30-400:~$ lsblk                           # output shows extra 3 TB storage is at nvme0n1
+First make the storage available as /opt:
+
+     ubuntu@ip-10-20-30-400:~$ lsblk                           # output shows extra 9 TB storage is at nvme0n1
      ubuntu@ip-10-20-30-400:~$ sudo mkfs -t xfs /dev/nvme0n1   # prep as xfs
      ubuntu@ip-10-20-30-400:~$ sudo mkdir /opt                 # if needed
      ubuntu@ip-10-20-30-400:~$ sudo mount /dev/nvme0n1 /opt    # mount as /opt
 
-Now ensure the mount is preserved on reboot. Run lsblk:
+Ensure the mount is preserved on reboot. Running lsblk again:
 
      ubuntu@ip-10-20-30-400:~$ sudo lsblk -o +UUID
 
-Harvest the UUID, for example xxxx131c-1234-451e-8d34-ec98989891ae, and update
-/etc/fstab as follows:
+From the output harvest the UUID, in this case
+abcd131c-1234-451e-8d34-ec98989891ae, and update /etc/fstab as follows:
 
      ubuntu@ip-10-20-30-400:~$ sudo vi /etc/fstab
 
-and add the line:
+Add the line:
 
-     UUID=xxxx131c-1234-451e-8d34-ec98989891ae /opt xfs defaults,nofail 0 2
+     UUID=abcd131c-1234-451e-8d34-ec98989891ae /opt xfs defaults,nofail 0 2
 
 ## Resizing attached storage
 
 I had to resize the EBS volume from 9 TB to 12 TB. I'm grateful to Ryan D. Smith
-for making the process clear for me. The basic steps are:
+for making the process clear for me. The steps were:
 
 1.  On the host, unmount the volume.
 2.  From the AWS Console, expand the volume.
@@ -55,30 +57,31 @@ Use lsblk to see what we're dealing with:
 ### Expand the volume
 
 Go to the AWS console's EC2 dashboard. In the navigation menu (left side of the
-page) select Elastic Block Store >> Volumes. Then:
+page) select Elastic Block Store >> Volumes, then:
 
 *   Click on the target volume.
 *   Under the Actions menu, select Modify Volume.
 *   Modify the volume.
 
-The update can take a while to complete, in this example about 10 hr. Its status
-in the AWS Console will be marked as "in-use - optimizing."
+The update can take a while to complete, in this example about ten hours. Its
+status in the AWS Console will be marked as "in-use - optimizing."
 
-Guidance from AWS at
-https://docs.aws.amazon.com/cli/latest/reference/ec2/modify-volume.html.
+There's guidance at
+https://docs.aws.amazon.com/cli/latest/reference/ec2/modify-volume.html from
+AWS.
 
 ### Expand the filesystem
 
 Once the volume is expanded, the associated Linux filesystem needs to be
-expanded too. On the host, remount the volume at /opt. Since we've configured
-the instance to mount the volume after a reboot, it's easiest to do
+expanded too. On the host, remount the volume at /opt. Since we configured the
+instance to mount the volume after a reboot, it's easiest to do
 
      ubuntu@ip-10-20-30-400:~$ sudo reboot
 
 and to log in again.
 
-With the volume mounted at /opt you'll see a difference in the reported space
-available:
+The volume is now mounted at /opt, and we see a difference between lsblk and df
+in the space reported as being available:
 
      ubuntu@ip-10-20-30-400:~$ lsblk
      NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -94,7 +97,7 @@ available:
      Filesystem      Size  Used Avail Use% Mounted on
      /dev/nvme0n1    8.8T  2.5T  6.4T  28% /opt
 
-Reconcile this:
+Reconcile this using xfs_growfs:
 
      ubuntu@ip-10-20-30-400:~$ sudo xfs_growfs -d /opt
      meta-data=/dev/nvme0n1           isize=512    agcount=12, agsize=196608000 blks
