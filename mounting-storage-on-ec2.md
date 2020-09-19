@@ -1,9 +1,10 @@
 # Mounting storage on an EC2 instance
 
-## On the instance, set up storage added when configuring the instance
 
 I set up an Ubuntu 18.04 server with 9 TB additional EBS volume, which is what
 we'll use in this example.
+
+## Setting up the storage added when configuring the instance
 
 First make the storage available as /opt:
 
