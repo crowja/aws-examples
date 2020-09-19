@@ -1,5 +1,4 @@
-# Mounting storage on an EC2 instance
-
+# Mounting and modifying storage on an EC2 instance
 
 I set up an Ubuntu 18.04 server with 9 TB additional EBS volume, which is what
 we'll use in this example.
