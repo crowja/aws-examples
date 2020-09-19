@@ -2,7 +2,7 @@
 
 ## On the instance, set up storage added when configuring the instance
 
-An Ubuntu 18.04 server has been set up with 3 TB additional EBS storage. First
+An Ubuntu 18.04 server has been set up with 9 TB additional EBS storage. First
 make it available as /opt.
 
      ubuntu@ip-10-20-30-400:~$ lsblk                           # output shows extra 3 TB storage is at nvme0n1
@@ -25,8 +25,8 @@ and add the line:
 
 ## Resizing attached storage
 
-I had to resize the EBS volume. I'm grateful to Ryan D. Smith for making the
-process clear for me. The basic steps are:
+I had to resize the EBS volume from 9 TB to 12 TB. I'm grateful to Ryan D. Smith
+for making the process clear for me. The basic steps are:
 
 1.  On the host, unmount the volume.
 2.  From the AWS Console, expand the volume.
@@ -43,7 +43,7 @@ Use lsblk to see what we're dealing with:
      loop1         7:1    0 96.6M  1 loop /snap/core/9804
      loop2         7:2    0 28.1M  1 loop /snap/amazon-ssm-agent/2012
      loop4         7:4    0 97.1M  1 loop /snap/core/9993
-     nvme0n1     259:0    0  2.7T  0 disk /opt
+     nvme0n1     259:0    0  8.8T  0 disk /opt
      nvme1n1     259:1    0    8G  0 disk
      └─nvme1n1p1 259:2    0    8G  0 part /
 
@@ -61,8 +61,8 @@ page) select Elastic Block Store >> Volumes. Then:
 *   Under the Actions menu, select Modify Volume.
 *   Modify the volume.
 
-The update can take a while to complete. Its status will be marked as "in-use -
-optimizing."
+The update can take a while to complete, in this example about 10 hr. Its status
+in the AWS Console will be marked as "in-use - optimizing."
 
 Guidance from AWS at
 https://docs.aws.amazon.com/cli/latest/reference/ec2/modify-volume.html.
@@ -80,11 +80,29 @@ and to log in again.
 With the volume mounted at /opt you'll see a difference in the reported space
 available:
 
-     EXAMPLE OF df -h /opt AND lsblk
+     ubuntu@ip-10-20-30-400:~$ lsblk
+     NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+     loop0         7:0    0 28.1M  1 loop /snap/amazon-ssm-agent/2012
+     loop1         7:1    0 97.1M  1 loop /snap/core/9993
+     loop2         7:2    0   18M  1 loop /snap/amazon-ssm-agent/1566
+     loop3         7:3    0 96.6M  1 loop /snap/core/9804
+     nvme0n1     259:0    0 11.7T  0 disk /opt
+     nvme1n1     259:1    0    8G  0 disk
+     └─nvme1n1p1 259:2    0    8G  0 part /
+
+     ubuntu@ip-10-20-30-400:~$ df -h /opt
+     Filesystem      Size  Used Avail Use% Mounted on
+     /dev/nvme0n1    8.8T  2.5T  6.4T  28% /opt
 
 Reconcile this:
 
      ubuntu@ip-10-20-30-400:~$ sudo xfs_growfs -d /opt
+     meta-data=/dev/nvme0n1           isize=512    agcount=12, agsize=196608000 blks
+      . . .
+
+     ubuntu@ip-10-20-30-400:~$ df -h /opt
+     Filesystem      Size  Used Avail Use% Mounted on
+     /dev/nvme0n1     12T  2.5T  9.3T  21% /opt
 
 See
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html
