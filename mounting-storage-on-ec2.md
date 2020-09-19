@@ -97,7 +97,7 @@ in the space reported as being available:
      Filesystem      Size  Used Avail Use% Mounted on
      /dev/nvme0n1    8.8T  2.5T  6.4T  28% /opt
 
-Reconcile this using xfs_growfs:
+Reconcile this using xfs\_growfs:
 
      ubuntu@ip-10-20-30-400:~$ sudo xfs_growfs -d /opt
      meta-data=/dev/nvme0n1           isize=512    agcount=12, agsize=196608000 blks
