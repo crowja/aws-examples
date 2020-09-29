@@ -9,6 +9,7 @@ Install a few helpers
      $ sudo apt install manpages-dev
      $ sudo apt install unzip
      $ sudo apt install screen
+     $ sudo apt install zlib1g-dev
 
 If useful to have Miniconda
 
