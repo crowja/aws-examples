@@ -1,5 +1,7 @@
 # Basic software on an EC2 instance
 
+These notes are for an Ubuntu system.
+
 ## Basic software
 
 Install a few helpers
