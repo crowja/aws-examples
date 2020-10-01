@@ -5,6 +5,7 @@
 Install a few helpers
 
      $ sudo apt update
+     $ sudo apt upgrade
      $ sudo apt install build-essential
      $ sudo apt install manpages-dev
      $ sudo apt install unzip
