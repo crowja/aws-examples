@@ -20,5 +20,8 @@ If useful to have Miniconda
 
 Make the download executable and run it. Update conda:
 
-     conda update conda
+     $ conda update conda
 
+Change the hostname by modifying the entry in /etc/hostname and change from
+"preserve\_hostname: false" to "preserve\_hostname: true" in
+/etc/cloud/cloud.cfg.
