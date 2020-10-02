@@ -22,6 +22,13 @@ Make the download executable and run it. Update conda:
 
      $ conda update conda
 
+## To change the instance's hostname
+
+     $ sudo vi /etc/hostname
+     . . .
+     $ sudo vi /etc/cloud/cloud.cfg
+     . . .
+
 Change the hostname by modifying the entry in /etc/hostname and change from
 "preserve\_hostname: false" to "preserve\_hostname: true" in
 /etc/cloud/cloud.cfg.
